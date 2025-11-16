@@ -17,8 +17,14 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        DialogManager.Instance.OnShowDialog += (() => state = GameState.dialog);
-        DialogManager.Instance.OnHideDialog += (() => state = GameState.free);
+        DialogManager.Instance.OnShowDialog += () =>
+        {
+            state = GameState.dialog;
+        };
+        DialogManager.Instance.OnHideDialog += () => { 
+            if(state == GameState.dialog)
+                state = GameState.free;
+        };
     }
 
     private void Update()
@@ -29,11 +35,11 @@ public class GameController : MonoBehaviour
         }
         else if (state == GameState.menu)
         {
-            DialogManager.Instance.HandleUpdate();
+            
         }
         else if (state == GameState.dialog)
         {
-            
+            DialogManager.Instance.HandleUpdate();
         }
     }
 }

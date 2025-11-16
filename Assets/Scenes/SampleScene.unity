@@ -2377,8 +2377,8 @@ MonoBehaviour:
   dialog:
     lines:
     - 111
-    - 111
-    - 111
+    - 33
+    - 2
 --- !u!1 &1521955162
 GameObject:
   m_ObjectHideFlags: 0

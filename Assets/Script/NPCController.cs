@@ -7,6 +7,6 @@ public class NPCController : MonoBehaviour , Interactable
     [SerializeField] private Dialog dialog;
     public void Interact()
     {
-        DialogManager.Instance.showDialog(dialog);
+        StartCoroutine(DialogManager.Instance.showDialog(dialog));
     }
 }
