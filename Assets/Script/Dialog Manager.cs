@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class DialogManager : MonoBehaviour
 {
-    [SerializeField] GameObject dialogBox;
+    [SerializeField] public GameObject dialogBox;
     [SerializeField] private Text dialogText;
 
     [SerializeField]private int lettersPerSecond;
@@ -21,7 +21,7 @@ public class DialogManager : MonoBehaviour
     }
     
     Dialog dialog;
-    int currentLine = 0;
+    public int currentLine = 0;
     bool isTyping;
    
 
@@ -36,7 +36,7 @@ public class DialogManager : MonoBehaviour
     }
     public void HandleUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.F)&&!isTyping)
+        if (Input.GetMouseButtonDown(0)&&!isTyping)
         {
             ++currentLine;
             if (currentLine < dialog.Lines.Count)
