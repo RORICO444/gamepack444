@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
-[CreateAssetMenu(menuName = "Event/VoidEventSO")]
+[CreateAssetMenu(fileName = "VoidEvent", menuName = "Game Events/Void Event")]
 public class VoidEventSO : ScriptableObject
 {
-    public UnityAction OnEventRaised;
-
+    public System.Action OnEventRaised;
+    
     public void RaiseEvent()
     {
         OnEventRaised?.Invoke();

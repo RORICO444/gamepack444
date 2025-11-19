@@ -127,15 +127,44 @@ public class LargeDialogManager : MonoBehaviour
         currentLine = 0;
     }
 
-    void load_story(string path)
+    private void load_story(string path)
     {
-        storyData = ExcelReader.ReadExcel(path);
-        if (storyData == null || storyData.Count == 0)
+        try
         {
-            Debug.LogError("No story data found at path: " + path);
-            EndDialog();
+            Debug.Log($"开始加载故事文件: {path}");
+            
+            // 调用修复后的 ExcelReader
+            storyData = ExcelReader.ReadExcel(path);
+            
+            if (storyData == null)
+            {
+                Debug.LogError($"ExcelReader.ReadExcel 返回 null");
+                storyData = new List<ExcelReader.ExcelData>();
+                return;
+            }
+            
+            if (storyData.Count == 0)
+            {
+                Debug.LogWarning($"故事数据为空，路径: {path}");
+            }
+            else
+            {
+                Debug.Log($"成功加载 {storyData.Count} 行对话数据");
+                
+                // 打印前几行数据用于调试
+                for (int i = 0; i < Mathf.Min(3, storyData.Count); i++)
+                {
+                    Debug.Log($"第{i+1}行: 说话者='{storyData[i].speaker}', 内容='{storyData[i].content}'");
+                }
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"加载故事失败: {e.Message}\n堆栈跟踪: {e.StackTrace}");
+            storyData = new List<ExcelReader.ExcelData>();
         }
     }
+
 
     void ShowNextLine()
     {
