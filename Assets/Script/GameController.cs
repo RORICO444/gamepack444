@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static LargeDialogManager;
 
 enum GameState
 {
-    free,dialog,menu
+    free,dialog,largeDialog,menu
 }
 
 
@@ -25,6 +26,15 @@ public class GameController : MonoBehaviour
             if(state == GameState.dialog)
                 state = GameState.free;
         };
+        LargeDialogManager.Instance.OnDialogStart += () =>
+        {
+            state = GameState.largeDialog;
+        };
+        LargeDialogManager.Instance.OnDialogEnd += () =>
+        {
+            if (state == GameState.largeDialog)
+                state = GameState.free;
+        };
     }
 
     private void Update()
@@ -40,6 +50,10 @@ public class GameController : MonoBehaviour
         else if (state == GameState.dialog)
         {
             DialogManager.Instance.HandleUpdate();
+        }
+        else if (state == GameState.largeDialog)
+        {
+            LargeDialogManager.Instance.HandleUpdate();
         }
     }
 }

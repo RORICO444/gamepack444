@@ -34,8 +34,12 @@ public class LargeDialogManager : MonoBehaviour
     public Action OnDialogEnd;
     public Action<string> OnSpeakerChange; // 说话者改变时的回调
 
+    
+                 
+
     private void Awake()
     {
+        Instance = this;
         dialogManager = GetComponent<DialogManager>();
         SetTypingSpeed(letterPerSecond);
         
@@ -44,7 +48,9 @@ public class LargeDialogManager : MonoBehaviour
             dialogPanel.SetActive(false);
     }
 
-    void Update()
+    public static LargeDialogManager Instance { get; set; }
+
+    public void HandleUpdate()
     {
         if (dialogPanel != null && dialogPanel.activeInHierarchy)
         {
@@ -75,6 +81,7 @@ public class LargeDialogManager : MonoBehaviour
     /// </summary>
     public void StartDialog()
     {
+        
         StartDialog(filePath);
     }
 
