@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 public class Constants
 {
     public static class StoryPaths
@@ -18,4 +20,16 @@ public class Constants
     
     // 保持兼容性
     public static string STORY_PATH = "assets/Resources/story/default.xlsx";
+}
+
+public class Data
+{
+    public static Dictionary<int,int> Items = new Dictionary<int, int>();
+}
+
+public class Item
+{
+    public int Id;
+    public string Name {get;set;}
+    public string Description {get;set;}
 }

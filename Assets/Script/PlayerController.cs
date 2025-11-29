@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     private PhysicsCheck physics;
     public LayerMask intractableLayer;
     
+    // 新增：控制是否允许移动
+    public bool movementEnabled = true;
+    
     // 新增：独立记录最后朝向
     private Vector2 lastFacingDirection = Vector2.right;
 
@@ -17,10 +20,25 @@ public class PlayerController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         physics = GetComponent<PhysicsCheck>();
+        
+        // 在开始时禁用移动
+        DisableMovement();
     }
 
     public void HandleUpdate()
     {
+        // 如果移动被禁用，直接返回
+        if (!movementEnabled)
+        {
+            // 确保动画状态正确
+            if (isMoving) 
+            {
+                isMoving = false;
+                animator.SetBool("isMoving", false);
+            }
+            return;
+        }
+        
         if (physics.touchWall)
         {
             isMoving = false;
@@ -68,7 +86,27 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // 新增：更新朝向的方法
+    // 新增：启用移动的方法
+    public void EnableMovement()
+    {
+        movementEnabled = true;
+        isMoving = false;
+        input = Vector2.zero;
+    }
+
+    // 新增：禁用移动的方法
+    public void DisableMovement()
+    {
+        movementEnabled = false;
+        isMoving = false;
+        input = Vector2.zero;
+        animator.SetBool("isMoving", false);
+        
+        // 停止所有移动协程
+        StopAllCoroutines();
+    }
+
+    //更新朝向的方法
     private void UpdateFacingDirection(Vector2 direction)
     {
         if (direction != Vector2.zero)
@@ -79,19 +117,18 @@ public class PlayerController : MonoBehaviour
 
     void Interacte()
     {
+        // 如果移动被禁用，交互也被禁用
+        if (!movementEnabled) return;
         
         var facingDir = lastFacingDirection;
         var interactPos = transform.position + (Vector3)facingDir * 0.6f; 
         
-      
         var collider = Physics2D.OverlapCircle(interactPos, 0.2f, intractableLayer);
         
         if (collider != null)
         {
-            Debug.Log("检测到可交互物体: " + collider.name);
             collider.GetComponent<Interactable>()?.Interact();
         }
-        
     }
 
     IEnumerator Move(Vector3 targetPos)
@@ -100,7 +137,8 @@ public class PlayerController : MonoBehaviour
 
         while ((targetPos - transform.position).sqrMagnitude > Mathf.Epsilon)
         {
-            if (physics.touchWall)
+            // 检查移动是否被禁用
+            if (!movementEnabled || physics.touchWall)
             {
                 isMoving = false;
                 yield break;
@@ -113,7 +151,4 @@ public class PlayerController : MonoBehaviour
         transform.position = targetPos;
         isMoving = false;
     }
-
-   
-   
 }

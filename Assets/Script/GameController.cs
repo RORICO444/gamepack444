@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using static LargeDialogManager;
 
-enum GameState
+
+public enum GameState
 {
     free,dialog,largeDialog,menu
 }
@@ -35,6 +35,12 @@ public class GameController : MonoBehaviour
             if (state == GameState.largeDialog)
                 state = GameState.free;
         };
+        LargeDialogManager.Instance.OnDialogPause += () =>
+        {
+            if (state == GameState.largeDialog)
+                state = GameState.free;
+        };
+        
     }
 
     private void Update()
